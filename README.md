@@ -1,4 +1,4 @@
-Brasukcoin - true anonymous currency.
+Brazukcoin - true anonymous currency.
 
 ## Building Brazukcoin 
 
