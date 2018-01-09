@@ -61,7 +61,7 @@
 
 Install the pre-compiled executables for **Windows**:
 
-[**https://github.com/brazukcoin/brazukcoin/releases/download/v.1.0.0/win-x64.zip**](**https://github.com/brazukcoin/brazukcoin/releases/download/v.1.0.0/win-x64.zip**)
+[**https://github.com/brazukcoin/brazukcoin/releases/**](**https://github.com/brazukcoin/brazukcoin/releases/**)
 
 
 - Download the .zip archive.
