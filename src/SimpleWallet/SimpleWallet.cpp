@@ -28,7 +28,7 @@
 #include <set>
 #include <sstream>
 #include <locale>
-
+#include <iostream>
 #include <functional>
 #include <iostream>
 #include <cstring>
@@ -71,7 +71,7 @@
 #include <windns.h>
 #include <Rpc.h>
 # else 
-#include <arpa/nameser.h>
+#include <arpa/nameser_compat.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -81,7 +81,8 @@
 
 using namespace CryptoNote;
 using namespace Logging;
-using Common::JsonValue;
+using Common::JsonValue;;
+
 
 namespace po = boost::program_options;
 
