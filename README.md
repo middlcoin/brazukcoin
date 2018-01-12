@@ -177,4 +177,3 @@ Done! Find you binaries in ..\brazukcoin\build\src\release\
 
 **Good luck!**
 
-
