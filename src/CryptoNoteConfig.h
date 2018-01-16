@@ -122,8 +122,8 @@ const size_t   P2P_DEFAULT_HANDSHAKE_INVOKE_TIMEOUT          = 5000;          //
 const char     P2P_STAT_TRUSTED_PUB_KEY[]                    = "8f80f9a5a434a9f1510d13336228debfee9c918ce505efe225d8c94d045fa115";
 
 const char* const SEED_NODES[] = { 
-  "191.252.120.160:44044",
-  "132.148.90.225:44044"
+  "node-1.brazukcoin.org:44044",
+  "node-2.brazukcoin.org:44044"
 };
 
 struct CheckpointData {
@@ -133,6 +133,7 @@ struct CheckpointData {
 
 const std::initializer_list<CheckpointData> CHECKPOINTS = { 
   { 1984, "09d2e9fe95143685f823db0dccb53fe847f6223324b9001e5ef1c9b2f2ac46f6" },
+  { 4927, "386e97b08e13f9178233905a749e7bf6099571d889b19b9020044fd348de54a0" }
 };
 
 } // CryptoNote
