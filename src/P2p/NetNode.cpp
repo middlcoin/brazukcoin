@@ -58,333 +58,376 @@ using namespace CryptoNote;
 
 namespace {
 
-size_t get_random_index_with_fixed_probability(size_t max_index) {
-  //divide by zero workaround
-  if (!max_index)
-    return 0;
-  size_t x = Crypto::rand<size_t>() % (max_index + 1);
-  return (x*x*x) / (max_index*max_index); //parabola \/
-}
-
-
-void addPortMapping(Logging::LoggerRef& logger, uint32_t port) {
-  // Add UPnP port mapping
-  logger(INFO) << "Attempting to add IGD port mapping.";
-  int result;
-  UPNPDev* deviceList = upnpDiscover(1000, NULL, NULL, 0, 0, &result);
-  UPNPUrls urls;
-  IGDdatas igdData;
-  char lanAddress[64];
-  result = UPNP_GetValidIGD(deviceList, &urls, &igdData, lanAddress, sizeof lanAddress);
-  freeUPNPDevlist(deviceList);
-  if (result != 0) {
-    if (result == 1) {
-      std::ostringstream portString;
-      portString << port;
-      if (UPNP_AddPortMapping(urls.controlURL, igdData.first.servicetype, portString.str().c_str(),
-        portString.str().c_str(), lanAddress, CryptoNote::CRYPTONOTE_NAME, "TCP", 0, "0") != 0) {
-        logger(ERROR) << "UPNP_AddPortMapping failed.";
-      } else {
-        logger(INFO, BRIGHT_GREEN) << "Added IGD port mapping.";
-      }
-    } else if (result == 2) {
-      logger(INFO) << "IGD was found but reported as not connected.";
-    } else if (result == 3) {
-      logger(INFO) << "UPnP device was found but not recoginzed as IGD.";
-    } else {
-      logger(ERROR) << "UPNP_GetValidIGD returned an unknown result code.";
+    size_t get_random_index_with_fixed_probability(size_t max_index) {
+        //divide by zero workaround
+        if (!max_index)
+            return 0;
+        size_t x = Crypto::rand<size_t>() % (max_index + 1);
+        return (x*x*x) / (max_index*max_index); //parabola \/
     }
 
-    FreeUPNPUrls(&urls);
-  } else {
-    logger(INFO) << "No IGD was found.";
-  }
-}
+    void addPortMapping(Logging::LoggerRef& logger, uint32_t port) {
+        // Add UPnP port mapping
+        logger(INFO) << "Attempting to add IGD port mapping.";
+        int result;
+        UPNPDev* deviceList = upnpDiscover(1000, NULL, NULL, 0, 0, &result);
+        UPNPUrls urls;
+        IGDdatas igdData;
+        char lanAddress[64];
+        result = UPNP_GetValidIGD(deviceList,
+                                  &urls,
+			                      &igdData,
+			                      lanAddress,
+			                      sizeof lanAddress);
+        freeUPNPDevlist(deviceList);
+        if (result != 0) {
+            if (result == 1) {
+                std::ostringstream portString;
+                portString << port;
+                if (UPNP_AddPortMapping(urls.controlURL,
+			                            igdData.first.servicetype,
+			                            portString.str().c_str(),
+        		                        portString.str().c_str(),
+			                            lanAddress,
+			                            CryptoNote::CRYPTONOTE_NAME,
+			                            "TCP",
+			                            0,
+			                            "0") != 0) {
+                    logger(ERROR) << "UPNP_AddPortMapping failed.";
+                } else {
+                    logger(INFO, BRIGHT_GREEN) << "Added IGD port mapping.";
+                } else if (result == 2) {
+                    logger(INFO) << "IGD was found but reported as not connected.";
+                } else if (result == 3) {
+                    logger(INFO) << "UPnP device was found but not recoginzed as IGD.";
+                } else {
+                    logger(ERROR) << "UPNP_GetValidIGD returned an unknown result code.";
+                }
 
-bool parse_peer_from_string(NetworkAddress& pe, const std::string& node_addr) {
-  return Common::parseIpAddressAndPort(pe.ip, pe.port, node_addr);
-}
-
-}
-
-
-namespace CryptoNote
-{
-  namespace
-  {
-    const command_line::arg_descriptor<std::string> arg_p2p_bind_ip        = {"p2p-bind-ip", "Interface for p2p network protocol", "0.0.0.0"};
-    const command_line::arg_descriptor<std::string> arg_p2p_bind_port      = {"p2p-bind-port", "Port for p2p network protocol", std::to_string(CryptoNote::P2P_DEFAULT_PORT)};
-    const command_line::arg_descriptor<uint32_t>    arg_p2p_external_port  = {"p2p-external-port", "External port for p2p network protocol (if port forwarding used with NAT)", 0};
-    const command_line::arg_descriptor<bool>        arg_p2p_allow_local_ip = {"allow-local-ip", "Allow local ip add to peer list, mostly in debug purposes"};
-    const command_line::arg_descriptor<std::vector<std::string> > arg_p2p_add_peer   = {"add-peer", "Manually add peer to local peerlist"};
-    const command_line::arg_descriptor<std::vector<std::string> > arg_p2p_add_priority_node   = {"add-priority-node", "Specify list of peers to connect to and attempt to keep the connection open"};
-    const command_line::arg_descriptor<std::vector<std::string> > arg_p2p_add_exclusive_node   = {"add-exclusive-node", "Specify list of peers to connect to only."
-                                                                                                  " If this option is given the options add-priority-node and seed-node are ignored"};
-    const command_line::arg_descriptor<std::vector<std::string> > arg_p2p_seed_node   = {"seed-node", "Connect to a node to retrieve peer addresses, and disconnect"};
-    const command_line::arg_descriptor<bool> arg_p2p_hide_my_port   =    {"hide-my-port", "Do not announce yourself as peerlist candidate", false, true};
-
-    std::string print_peerlist_to_string(const std::list<PeerlistEntry>& pl) {
-      time_t now_time = 0;
-      time(&now_time);
-      std::stringstream ss;
-      ss << std::setfill('0') << std::setw(8) << std::hex << std::noshowbase;
-      for (const auto& pe : pl) {
-        ss << pe.id << "\t" << pe.adr << " \tlast_seen: " << Common::timeIntervalToString(now_time - pe.last_seen) << std::endl;
-      }
-      return ss.str();
-    }
-  }
-
-
-  //-----------------------------------------------------------------------------------
-  // P2pConnectionContext implementation
-  //-----------------------------------------------------------------------------------
-
-  bool P2pConnectionContext::pushMessage(P2pMessage&& msg) {
-    writeQueueSize += msg.size();
-
-    if (writeQueueSize > P2P_CONNECTION_MAX_WRITE_BUFFER_SIZE) {
-      logger(DEBUGGING) << *this << "Write queue overflows. Interrupt connection";
-      interrupt();
-      return false;
-    }
-
-    writeQueue.push_back(std::move(msg));
-    queueEvent.set();
-    return true;
-  }
-
-  std::vector<P2pMessage> P2pConnectionContext::popBuffer() {
-    writeOperationStartTime = TimePoint();
-
-    while (writeQueue.empty() && !stopped) {
-      queueEvent.wait();
-    }
-
-    std::vector<P2pMessage> msgs(std::move(writeQueue));
-    writeQueue.clear();
-    writeQueueSize = 0;
-    writeOperationStartTime = Clock::now();
-    queueEvent.clear();
-    return msgs;
-  }
-
-  uint64_t P2pConnectionContext::writeDuration(TimePoint now) const { // in milliseconds
-    return writeOperationStartTime == TimePoint() ? 0 : std::chrono::duration_cast<std::chrono::milliseconds>(now - writeOperationStartTime).count();
-  }
-
-  void P2pConnectionContext::interrupt() {
-    logger(DEBUGGING) << *this << "Interrupt connection";
-    assert(context != nullptr);
-    stopped = true;
-    queueEvent.set();
-    context->interrupt();
-  }
-
-
-  template <typename Command, typename Handler>
-  int invokeAdaptor(const BinaryArray& reqBuf, BinaryArray& resBuf, P2pConnectionContext& ctx, Handler handler) {
-    typedef typename Command::request Request;
-    typedef typename Command::response Response;
-    int command = Command::ID;
-
-    Request req = boost::value_initialized<Request>();
-
-    if (!LevinProtocol::decode(reqBuf, req)) {
-      throw std::runtime_error("Failed to load_from_binary in command " + std::to_string(command));
-    }
-
-    Response res = boost::value_initialized<Response>();
-    int ret = handler(command, req, res, ctx);
-    resBuf = LevinProtocol::encode(res);
-    return ret;
-  }
-
-  NodeServer::NodeServer(System::Dispatcher& dispatcher, CryptoNote::CryptoNoteProtocolHandler& payload_handler, Logging::ILogger& log) :
-    m_dispatcher(dispatcher),
-    m_workingContextGroup(dispatcher),
-    m_payload_handler(payload_handler),
-    m_allow_local_ip(false),
-    m_hide_my_port(false),
-    m_network_id(BYTECOIN_NETWORK),
-    logger(log, "node_server"),
-    m_stopEvent(m_dispatcher),
-    m_idleTimer(m_dispatcher),
-    m_timedSyncTimer(m_dispatcher),
-    m_timeoutTimer(m_dispatcher),
-    m_stop(false),
-    // intervals
-    // m_peer_handshake_idle_maker_interval(CryptoNote::P2P_DEFAULT_HANDSHAKE_INTERVAL),
-    m_connections_maker_interval(1),
-    m_peerlist_store_interval(60*30, false) {
-  }
-
-  void NodeServer::serialize(ISerializer& s) {
-    uint8_t version = 1;
-    s(version, "version");
-    
-    if (version != 1) {
-      throw std::runtime_error("Unsupported version");
-    }
-
-    s(m_peerlist, "peerlist");
-    s(m_config.m_peer_id, "peer_id");
-  }
-
-#define INVOKE_HANDLER(CMD, Handler) case CMD::ID: { ret = invokeAdaptor<CMD>(cmd.buf, out, ctx,  boost::bind(Handler, this, _1, _2, _3, _4)); break; }
-
-  int NodeServer::handleCommand(const LevinProtocol::Command& cmd, BinaryArray& out, P2pConnectionContext& ctx, bool& handled) {
-    int ret = 0;
-    handled = true;
-
-    if (cmd.isResponse && cmd.command == COMMAND_TIMED_SYNC::ID) {
-      if (!handleTimedSyncResponse(cmd.buf, ctx)) {
-        // invalid response, close connection
-        ctx.m_state = CryptoNoteConnectionContext::state_shutdown;
-      }
-      return 0;
-    }
-
-    switch (cmd.command) {
-      INVOKE_HANDLER(COMMAND_HANDSHAKE, &NodeServer::handle_handshake)
-      INVOKE_HANDLER(COMMAND_TIMED_SYNC, &NodeServer::handle_timed_sync)
-      INVOKE_HANDLER(COMMAND_PING, &NodeServer::handle_ping)
-#ifdef ALLOW_DEBUG_COMMANDS
-      INVOKE_HANDLER(COMMAND_REQUEST_STAT_INFO, &NodeServer::handle_get_stat_info)
-      INVOKE_HANDLER(COMMAND_REQUEST_NETWORK_STATE, &NodeServer::handle_get_network_state)
-      INVOKE_HANDLER(COMMAND_REQUEST_PEER_ID, &NodeServer::handle_get_peer_id)
-#endif
-    default: {
-        handled = false;
-        ret = m_payload_handler.handleCommand(cmd.isNotify, cmd.command, cmd.buf, out, ctx, handled);
-      }
-    }
-
-    return ret;
-  }
-
-#undef INVOKE_HANDLER
-
-  //-----------------------------------------------------------------------------------
-  
-  void NodeServer::init_options(boost::program_options::options_description& desc)
-  {
-    command_line::add_arg(desc, arg_p2p_bind_ip);
-    command_line::add_arg(desc, arg_p2p_bind_port);
-    command_line::add_arg(desc, arg_p2p_external_port);
-    command_line::add_arg(desc, arg_p2p_allow_local_ip);
-    command_line::add_arg(desc, arg_p2p_add_peer);
-    command_line::add_arg(desc, arg_p2p_add_priority_node);
-    command_line::add_arg(desc, arg_p2p_add_exclusive_node);
-    command_line::add_arg(desc, arg_p2p_seed_node);    
-    command_line::add_arg(desc, arg_p2p_hide_my_port);
-  }
-  //-----------------------------------------------------------------------------------
-  
-  bool NodeServer::init_config() {
-    try {
-      std::string state_file_path = m_config_folder + "/" + m_p2p_state_filename;
-      bool loaded = false;
-
-      try {
-        std::ifstream p2p_data;
-        p2p_data.open(state_file_path, std::ios_base::binary | std::ios_base::in);
-
-        if (!p2p_data.fail()) {
-          StdInputStream inputStream(p2p_data);
-          BinaryInputStreamSerializer a(inputStream);
-          CryptoNote::serialize(*this, a);
-          loaded = true;
+                FreeUPNPUrls(&urls);
+            } else {
+                logger(INFO) << "No IGD was found.";
+            }
         }
-      } catch (const std::exception& e) {
-        logger(ERROR, BRIGHT_RED) << "Failed to load config from file '" << state_file_path << "': " << e.what();
-      }
-
-      if (!loaded) {
-        make_default_config();
-      }
-
-      //at this moment we have hardcoded config
-      m_config.m_net_config.handshake_interval = CryptoNote::P2P_DEFAULT_HANDSHAKE_INTERVAL;
-      m_config.m_net_config.connections_count = CryptoNote::P2P_DEFAULT_CONNECTIONS_COUNT;
-      m_config.m_net_config.packet_max_size = CryptoNote::P2P_DEFAULT_PACKET_MAX_SIZE; //20 MB limit
-      m_config.m_net_config.config_id = 0; // initial config
-      m_config.m_net_config.connection_timeout = CryptoNote::P2P_DEFAULT_CONNECTION_TIMEOUT;
-      m_config.m_net_config.ping_connection_timeout = CryptoNote::P2P_DEFAULT_PING_CONNECTION_TIMEOUT;
-      m_config.m_net_config.send_peerlist_sz = CryptoNote::P2P_DEFAULT_PEERS_IN_HANDSHAKE;
-
-      m_first_connection_maker_call = true;
-    } catch (const std::exception& e) {
-      logger(ERROR, BRIGHT_RED) << "init_config failed: " << e.what();
-      return false;
     }
-    return true;
-  }
 
-  //----------------------------------------------------------------------------------- 
-  void NodeServer::for_each_connection(std::function<void(CryptoNoteConnectionContext&, PeerIdType)> f)
-  {
-    for (auto& ctx : m_connections) {
-      f(ctx.second, ctx.second.peerId);
+    bool parse_peer_from_string(NetworkAddress& pe,
+                                const std::string& node_addr) {
+        return Common::parseIpAddressAndPort(pe.ip, pe.port, node_addr);
     }
-  }
 
-  //----------------------------------------------------------------------------------- 
-  void NodeServer::externalRelayNotifyToAll(int command, const BinaryArray& data_buff) {
-    m_dispatcher.remoteSpawn([this, command, data_buff] {
-      relay_notify_to_all(command, data_buff, nullptr);
-    });
-  }
+}
 
-  //-----------------------------------------------------------------------------------
-  bool NodeServer::make_default_config()
-  {
-    m_config.m_peer_id  = Crypto::rand<uint64_t>();
-    logger(INFO, BRIGHT_WHITE) << "Generated new peer ID: " << m_config.m_peer_id;
-    return true;
-  }
+
+namespace CryptoNote {
+    namespace {
+        const command_line::arg_descriptor<std::string> arg_p2p_bind_ip = {
+            "p2p-bind-ip", "Interface for p2p network protocol", "0.0.0.0"
+        };
+        const command_line::arg_descriptor<std::string> arg_p2p_bind_port = {
+            "p2p-bind-port",
+            "Port for p2p network protocol",
+            std::to_string(CryptoNote::P2P_DEFAULT_PORT)
+        };
+        const command_line::arg_descriptor<uint32_t> arg_p2p_external_port = {
+            "p2p-external-port",
+            "External port for p2p network protocol (if port forwarding used with NAT)",
+            0
+        };
+        const command_line::arg_descriptor<bool> arg_p2p_allow_local_ip = {
+            "allow-local-ip",
+            "Allow local ip add to peer list, mostly in debug purposes"
+        };
+        const command_line::arg_descriptor<std::vector<std::string>> arg_p2p_add_peer = {
+            "add-peer",
+            "Manually add peer to local peerlist"
+        };
+        const command_line::arg_descriptor<std::vector<std::string>> arg_p2p_add_priority_node = {
+            "add-priority-node",
+            "Specify list of peers to connect to and attempt to keep the connection open"
+        };
+        const command_line::arg_descriptor<std::vector<std::string>> arg_p2p_add_exclusive_node = {
+            "add-exclusive-node",
+            "Specify list of peers to connect to only.",
+            " If this option is given the options add-priority-node and seed-node are ignored"
+        };
+        const command_line::arg_descriptor<std::vector<std::string>> arg_p2p_seed_node = {
+            "seed-node",
+            "Connect to a node to retrieve peer addresses, and disconnect"
+        };
+        const command_line::arg_descriptor<bool> arg_p2p_hide_my_port = {
+            "hide-my-port",
+            "Do not announce yourself as peerlist candidate",
+            false,
+            true
+        };
+
+        std::string print_peerlist_to_string(const std::list<PeerlistEntry>& pl) {
+            time_t now_time = 0;
+            time(&now_time);
+            std::stringstream ss;
+            ss << std::setfill('0') << std::setw(8) << std::hex << std::noshowbase;
+            for (const auto& pe : pl) {
+                ss << pe.id << "\t" << pe.adr << " \tlast_seen: " << Common::timeIntervalToString(now_time - pe.last_seen) << std::endl;
+            }
+            return ss.str();
+        }
+    }
+
+
+    //--------------------------------------------------------------------------
+    // P2pConnectionContext implementation
+    //--------------------------------------------------------------------------
+
+    bool P2pConnectionContext::pushMessage(P2pMessage&& msg) {
+        writeQueueSize += msg.size();
+
+        if (writeQueueSize > P2P_CONNECTION_MAX_WRITE_BUFFER_SIZE) {
+            logger(DEBUGGING) << *this << "Write queue overflows. Interrupt connection";
+            interrupt();
+            return false;
+        }
+
+        writeQueue.push_back(std::move(msg));
+        queueEvent.set();
+        return true;
+    }
+
+    std::vector<P2pMessage> P2pConnectionContext::popBuffer() {
+        writeOperationStartTime = TimePoint();
+
+        while (writeQueue.empty() && !stopped) {
+            queueEvent.wait();
+        }
+
+        std::vector<P2pMessage> msgs(std::move(writeQueue));
+        writeQueue.clear();
+        writeQueueSize = 0;
+        writeOperationStartTime = Clock::now();
+        queueEvent.clear();
+        return msgs;
+    }
+
+    uint64_t P2pConnectionContext::writeDuration(TimePoint now) const { // in milliseconds
+        return writeOperationStartTime == TimePoint() ? 0 :
+           std::chrono::duration_cast<std::chrono::milliseconds>(now - writeOperationStartTime).count();
+    }
+
+    void P2pConnectionContext::interrupt() {
+        logger(DEBUGGING) << *this << "Interrupt connection";
+        assert(context != nullptr);
+        stopped = true;
+        queueEvent.set();
+        context->interrupt();
+    }
+
+
+    template <typename Command, typename Handler>
+    int invokeAdaptor(const BinaryArray& reqBuf,
+                      BinaryArray& resBuf,
+                      P2pConnectionContext& ctx,
+                      Handler handler) {
+        typedef typename Command::request Request;
+        typedef typename Command::response Response;
+        int command = Command::ID;
+
+        Request req = boost::value_initialized<Request>();
+
+        if (!LevinProtocol::decode(reqBuf, req)) {
+            throw std::runtime_error("Failed to load_from_binary in command " + std::to_string(command));
+        }
+
+        Response res = boost::value_initialized<Response>();
+        int ret = handler(command, req, res, ctx);
+        resBuf = LevinProtocol::encode(res);
+        return ret;
+    }
+
+    NodeServer::NodeServer(System::Dispatcher& dispatcher,
+                           CryptoNote::CryptoNoteProtocolHandler& payload_handler,
+                           Logging::ILogger& log) :
+        m_dispatcher(dispatcher),
+        m_workingContextGroup(dispatcher),
+        m_payload_handler(payload_handler),
+        m_allow_local_ip(false),
+        m_hide_my_port(false),
+        m_network_id(BYTECOIN_NETWORK),
+        logger(log, "node_server"),
+        m_stopEvent(m_dispatcher),
+        m_idleTimer(m_dispatcher),
+        m_timedSyncTimer(m_dispatcher),
+        m_timeoutTimer(m_dispatcher),
+        m_stop(false),
+        // intervals
+        // m_peer_handshake_idle_maker_interval(CryptoNote::P2P_DEFAULT_HANDSHAKE_INTERVAL),
+        m_connections_maker_interval(1),
+        m_peerlist_store_interval(60*30, false) {
+        } 
+
+    void NodeServer::serialize(ISerializer& s) {
+        uint8_t version = 1;
+        s(version, "version");
+    
+        if (version != 1) {
+            throw std::runtime_error("Unsupported version");
+        }
+
+        s(m_peerlist, "peerlist");
+        s(m_config.m_peer_id, "peer_id");
+    }
+
+    #define INVOKE_HANDLER(CMD, Handler) case CMD::ID: { ret = invokeAdaptor<CMD>(cmd.buf, out, ctx,  boost::bind(Handler, this, _1, _2, _3, _4)); break; }
+
+    int NodeServer::handleCommand(const LevinProtocol::Command& cmd,
+                                  BinaryArray& out,
+                                  P2pConnectionContext& ctx,
+                                  bool& handled) {
+        int ret = 0;
+        handled = true;
+
+        if (cmd.isResponse && cmd.command == COMMAND_TIMED_SYNC::ID) {
+            if (!handleTimedSyncResponse(cmd.buf, ctx)) {
+                // invalid response, close connection
+                ctx.m_state = CryptoNoteConnectionContext::state_shutdown;
+            }
+            return 0;
+        }
+
+        switch (cmd.command) {
+            INVOKE_HANDLER(COMMAND_HANDSHAKE, &NodeServer::handle_handshake)
+            INVOKE_HANDLER(COMMAND_TIMED_SYNC, &NodeServer::handle_timed_sync)
+            INVOKE_HANDLER(COMMAND_PING, &NodeServer::handle_ping)
+            #ifdef ALLOW_DEBUG_COMMANDS
+            INVOKE_HANDLER(COMMAND_REQUEST_STAT_INFO, &NodeServer::handle_get_stat_info)
+            INVOKE_HANDLER(COMMAND_REQUEST_NETWORK_STATE, &NodeServer::handle_get_network_state)
+            INVOKE_HANDLER(COMMAND_REQUEST_PEER_ID, &NodeServer::handle_get_peer_id)
+            #endif
+            default: {
+                handled = false;
+                ret = m_payload_handler.handleCommand(cmd.isNotify, cmd.command, cmd.buf, out, ctx, handled);
+            }
+        }
+
+        return ret;
+    }
+
+    #undef INVOKE_HANDLER
+
+    //--------------------------------------------------------------------------
   
-  //-----------------------------------------------------------------------------------
+    void NodeServer::init_options(boost::program_options::options_description& desc) {
+        command_line::add_arg(desc, arg_p2p_bind_ip);
+        command_line::add_arg(desc, arg_p2p_bind_port);
+        command_line::add_arg(desc, arg_p2p_external_port);
+        command_line::add_arg(desc, arg_p2p_allow_local_ip);
+        command_line::add_arg(desc, arg_p2p_add_peer);
+        command_line::add_arg(desc, arg_p2p_add_priority_node);
+        command_line::add_arg(desc, arg_p2p_add_exclusive_node);
+        command_line::add_arg(desc, arg_p2p_seed_node);    
+        command_line::add_arg(desc, arg_p2p_hide_my_port);
+    }
+    //--------------------------------------------------------------------------
   
-  bool NodeServer::handle_command_line(const boost::program_options::variables_map& vm)
-  {
-    m_bind_ip = command_line::get_arg(vm, arg_p2p_bind_ip);
-    m_port = command_line::get_arg(vm, arg_p2p_bind_port);
-    m_external_port = command_line::get_arg(vm, arg_p2p_external_port);
-    m_allow_local_ip = command_line::get_arg(vm, arg_p2p_allow_local_ip);
+    bool NodeServer::init_config() {
+        try {
+            std::string state_file_path = m_config_folder + "/" + m_p2p_state_filename;
+            bool loaded = false;
 
-    if (command_line::has_arg(vm, arg_p2p_add_peer))
-    {       
-      std::vector<std::string> perrs = command_line::get_arg(vm, arg_p2p_add_peer);
-      for(const std::string& pr_str: perrs)
-      {
-        PeerlistEntry pe = boost::value_initialized<PeerlistEntry>();
-        pe.id = Crypto::rand<uint64_t>();
-        bool r = parse_peer_from_string(pe.adr, pr_str);
-        if (!(r)) { logger(ERROR, BRIGHT_RED) << "Failed to parse address from string: " << pr_str; return false; }
-        m_command_line_peers.push_back(pe);
-      }
+            try {
+                std::ifstream p2p_data;
+                p2p_data.open(state_file_path, std::ios_base::binary | std::ios_base::in);
+
+                if (!p2p_data.fail()) {
+                    StdInputStream inputStream(p2p_data);
+                    BinaryInputStreamSerializer a(inputStream);
+                    CryptoNote::serialize(*this, a);
+                    loaded = true;
+                }
+            } catch (const std::exception& e) {
+                logger(ERROR, BRIGHT_RED) << "Failed to load config from file '" << state_file_path << "': " << e.what();
+              }
+
+            if (!loaded) {
+                make_default_config();
+            }
+
+            //at this moment we have hardcoded config
+            m_config.m_net_config.handshake_interval = CryptoNote::P2P_DEFAULT_HANDSHAKE_INTERVAL;
+            m_config.m_net_config.connections_count = CryptoNote::P2P_DEFAULT_CONNECTIONS_COUNT;
+            m_config.m_net_config.packet_max_size = CryptoNote::P2P_DEFAULT_PACKET_MAX_SIZE; //20 MB limit
+            m_config.m_net_config.config_id = 0; // initial config
+            m_config.m_net_config.connection_timeout = CryptoNote::P2P_DEFAULT_CONNECTION_TIMEOUT;
+            m_config.m_net_config.ping_connection_timeout = CryptoNote::P2P_DEFAULT_PING_CONNECTION_TIMEOUT;
+            m_config.m_net_config.send_peerlist_sz = CryptoNote::P2P_DEFAULT_PEERS_IN_HANDSHAKE;
+            m_first_connection_maker_call = true;
+        } catch (const std::exception& e) {
+            logger(ERROR, BRIGHT_RED) << "init_config failed: " << e.what();
+            return false;
+          }
+        return true;
     }
 
-    if (command_line::has_arg(vm,arg_p2p_add_exclusive_node)) {
-      if (!parse_peers_and_add_to_container(vm, arg_p2p_add_exclusive_node, m_exclusive_peers))
-        return false;
-    }
-    if (command_line::has_arg(vm, arg_p2p_add_priority_node)) {
-      if (!parse_peers_and_add_to_container(vm, arg_p2p_add_priority_node, m_priority_peers))
-        return false;
-    }
-    if (command_line::has_arg(vm, arg_p2p_seed_node)) {
-      if (!parse_peers_and_add_to_container(vm, arg_p2p_seed_node, m_seed_nodes))
-        return false;
+    //-------------------------------------------------------------------------- 
+    void NodeServer::for_each_connection(std::function<void(CryptoNoteConnectionContext&, PeerIdType)> f) {
+        for (auto& ctx : m_connections) {
+            f(ctx.second, ctx.second.peerId);
+        }
     }
 
-    if (command_line::has_arg(vm, arg_p2p_hide_my_port)) {
-      m_hide_my_port = true;
+    //-------------------------------------------------------------------------- 
+    void NodeServer::externalRelayNotifyToAll(int command, const BinaryArray& data_buff) {
+        m_dispatcher.remoteSpawn([this, command, data_buff] {
+            relay_notify_to_all(command, data_buff, nullptr);
+        });
     }
 
-    return true;
-  }
+    //--------------------------------------------------------------------------
+    bool NodeServer::make_default_config() {
+        m_config.m_peer_id  = Crypto::rand<uint64_t>();
+        logger(INFO, BRIGHT_WHITE) << "Generated new peer ID: " << m_config.m_peer_id;
+        return true;
+    }
+  
+    //--------------------------------------------------------------------------
+    bool NodeServer::handle_command_line(const boost::program_options::variables_map& vm) {
+        m_bind_ip = command_line::get_arg(vm, arg_p2p_bind_ip);
+        m_port = command_line::get_arg(vm, arg_p2p_bind_port);
+        m_external_port = command_line::get_arg(vm, arg_p2p_external_port);
+        m_allow_local_ip = command_line::get_arg(vm, arg_p2p_allow_local_ip);
+
+        if (command_line::has_arg(vm, arg_p2p_add_peer)) {       
+            std::vector<std::string> perrs = command_line::get_arg(vm, arg_p2p_add_peer);
+            for(const std::string& pr_str: perrs) {
+                PeerlistEntry pe = boost::value_initialized<PeerlistEntry>();
+                pe.id = Crypto::rand<uint64_t>();
+                bool r = parse_peer_from_string(pe.adr, pr_str);
+                if (!(r)) {
+                    logger(ERROR, BRIGHT_RED) << "Failed to parse address from string: " << pr_str;
+                    return false;
+                }
+            m_command_line_peers.push_back(pe);
+            }
+        }
+
+        if (command_line::has_arg(vm,arg_p2p_add_exclusive_node)) {
+            if (!parse_peers_and_add_to_container(vm, arg_p2p_add_exclusive_node, m_exclusive_peers))
+                return false;
+        }
+        if (command_line::has_arg(vm, arg_p2p_add_priority_node)) {
+            if (!parse_peers_and_add_to_container(vm, arg_p2p_add_priority_node, m_priority_peers))
+                return false;
+        }
+        if (command_line::has_arg(vm, arg_p2p_seed_node)) {
+            if (!parse_peers_and_add_to_container(vm, arg_p2p_seed_node, m_seed_nodes))
+                return false;
+        }
+
+        if (command_line::has_arg(vm, arg_p2p_hide_my_port)) {
+            m_hide_my_port = true;
+        }
+
+        return true;
+    }
 
   bool NodeServer::handleConfig(const NetNodeConfig& config) {
     m_bind_ip = config.getBindIp();
