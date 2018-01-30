@@ -70,12 +70,21 @@ size_t get_random_index_with_fixed_probability(size_t max_index) {
 void addPortMapping(Logging::LoggerRef& logger, uint32_t port) {
   // Add UPnP port mapping
   logger(INFO) << "Attempting to add IGD port mapping.";
-  int result;
+  
+  //	disable 'result' until too long time out issue is found.
+  //	result always returns non-zero anyway. 
+  int result = 5;
   UPNPDev* deviceList = upnpDiscover(1000, NULL, NULL, 0, 0, &result);
   UPNPUrls urls;
   IGDdatas igdData;
   char lanAddress[64];
-  result = UPNP_GetValidIGD(deviceList, &urls, &igdData, lanAddress, sizeof lanAddress);
+
+  
+
+// result = UPNP_GetValidIGD(deviceList, &urls, &igdData, lanAddress, sizeof lanAddress);
+
+
+
   freeUPNPDevlist(deviceList);
   if (result != 0) {
     if (result == 1) {
