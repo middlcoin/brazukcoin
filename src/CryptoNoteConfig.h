@@ -140,7 +140,9 @@ const std::initializer_list<CheckpointData> CHECKPOINTS = {
     { 3968, "13c3e7692bdace890976d6bb0a4acd9202be5a8ef6cb0722ef3682b7594377d7" },
     { 5952, "d12b76f4322a33895f85350acee9a1b72f29eb381d6a9eb8978b7cffb93444cf" },
     { 7936, "4a75cc598e4c53533fb2cb26423563ddbe47a2c5109ae40e3967da4d472a8d24" },
-    { 9920, "2bc30a1d555f3f56d66eadb8d443e096a1d56d4f38acd9327bc17d16a981d36f" }
+    { 9920, "2bc30a1d555f3f56d66eadb8d443e096a1d56d4f38acd9327bc17d16a981d36f" },
+    { 11904, "812ad851c766a4e17a2a1ba11cdd16b91caec86ba74f742d3a8c6f5486c9cb26" },
+    { 13888, "17ed08363437e18891e8bcf3a95bf68a28e8c91cecbd9a381c627c8ae5f34d81" }
 };
 
 }  // namespace CryptoNote
