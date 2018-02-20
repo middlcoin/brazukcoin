@@ -1,179 +1,208 @@
-# Brazukcoin - true anonymous currency
+![Brazukcoin Logo](https://github.com/brazukcoin/brazukcoin/src/Images/brazukcoin-logo.png)
 
 
-###### In a world of increasing threats to liberty, Brazukcoin brings a new front of resistance in the form of **financial freedom**.
+# Brazukcoin
 
-###### Brazukcoin is based on the time tested **blockchain** technology, and also has extreme **privacy** features in its Cryptonote algorithm.
+## Anonymous • Secure • Accessible
 
-###### The code is (and will always remain) free and **open-source**!
+##### In a world of mounting threats to personal liberty, Brazukcoin adds a new front of resistance through real financial freedom. Brazukcoin is based on time-tested blockchain technology while also adding extreme privacy features in its CryptoNote algorithm. The code is (and will always be) free and open-source.
 
 
 
 
-###### **Specifications:**
+######Specifications
 
+- *Logo:* [https://goo.gl/Yz5yru](https://goo.gl/Yz5yru)
+- *Ticker:* BZK
+- *Premine:* None
+- *Mining algorithm:* CryptoNight (it enables truly anonymous and decentralized blockchain-based currency)
+- *Max supply:* 10 million coins (+ tail emission ~1% yearly)
+- *Block reward:* initial reward of ~38 BZK
+- *Block target time:* ~4 minutes
+- *Difficulty:* Retargets at every block
+- *Transaction fee:* 0.0001 BZK
+- *P2P Port:* 44044
+- *RPC Port:* 44043
 
-- Ticker: BZK
-- NO Pre-mine
-- Mining algorithm: CryptoNight (it enables a truly anonymous and decentralized blockchain-based currency)
-- Max supply: 10 million coins (+ tail emission ~1% yearly)
-- Block reward: Initial reward of ~38 BZK
-- Block target time: Around 4 minutes
-- Difficulty: Retargets at every block
-- Low transaction fee: 0.0001 BZK
-- P2P Port: 44044
-- Rpc Port: 44043
+More information about Brazukcoin's specifications can be found on the [Crypto Resource Network:](http://www.cryptoresourcenetwork.com/brazukcoin.html)
 
 
 
 
-###### **Website:**
+######Community
 
+- **Discord:** [https://discord.gg/u5654Jj](https://discord.gg/u5654Jj)
+- **Twitter:** [https://twitter.com/brazukcoin](https://twitter.com/brazukcoin)
+- **Slack:** [https://join.slack.com/t/brazukcoin/shared_invite/enQtMjk2OTI4Nzg0ODA0LTIwYWYxMGQwZjIzNDhjYTQ0NjViYjFiMmNjMjYxNTE5NzcwYTI2NzYzOWNiNjU1ZDFiNjMxODk5MWQ1YmUyYzM](https://join.slack.com/t/brazukcoin/shared_invite/enQtMjk2OTI4Nzg0ODA0LTIwYWYxMGQwZjIzNDhjYTQ0NjViYjFiMmNjMjYxNTE5NzcwYTI2NzYzOWNiNjU1ZDFiNjMxODk5MWQ1YmUyYzM)
+- **Reddit:** [https://www.reddit.com/r/Brazukcoin](https://www.reddit.com/r/Brazukcoin)
+- **Telegram:** [https://t.me/joinchat/FWPKVhIKxwgl6cauM-3-eg](https://t.me/joinchat/FWPKVhIKxwgl6cauM-3-eg)
 
-[**http://www.brazukcoin.space**](**http://www.brazukcoin.space**)
 
 
 
+######Website
 
-###### **Mining Pools:**
+**[https://www.brazukcoin.space](https://www.brazukcoin.space)**
 
 
-[**http://bzk.hpool.net**](**http://bzk.hpool.net**)
 
-[**http://pool.brazukcoin.space**](**http://pool.brazukcoin.space**)
 
+######Mining Pools
 
+You can create your own pool by cloning from [Brazukcoin Pool Github:](https://github.com/brazukcoin/pool.brazukcoin.org)
 
+Or use these quality pools for Brazukcoin:
 
-###### **Block Explorer:**
+- **[http://pool.brazukcoin.org](http://pool.brazukcoin.org)**
 
+- **[https://bzk.dreampool.info](https://bzk.dreampool.info)**
 
-[**http://block.brazukcoin.space**](**http://block.brazukcoin.space**)
+- **[http://bzkpool.brazukcoin.com](http://bzkpool.brazukcoin.com)**
 
+- **[http://brazukcoin.labbinarymining.com](http://brazukcoin.labbinarymining.com)**
 
-*Thanks katorisenko!*
 
 
 
+######Block Explorer
 
-###### **Get your Brazuk wallet here:**
+**[http://explorer.brazukcoin.org/](http://explorer.brazukcoin.org/)**
 
 
-Install the pre-compiled executables for **Windows**:
 
-[**https://github.com/brazukcoin/brazukcoin/releases/**](**https://github.com/brazukcoin/brazukcoin/releases/**)
 
+######Wallets
 
-- Download the .zip archive.
-- Extract the files.
-- Run brazukcoind.exe (to sync the blockchain) and let it running.
-- Run simplewallet.exe to create your wallet.
-- type 'help' (no quotes) for further instructions on how to mine, transfer money, get your private key, etc.
 
-**Important: Write down the seed information on paper, protect your *.wallet file, and never forget your password!**
+**Easy Brazukcoin Wallet Generator:**
 
+*Instructions*
+- Visit [http://wallet.brazukcoin.org](http://wallet.brazukcoin.org) and a wallet will be instantly created for you
+- Write down your seed information in case you lose your wallet!
 
+**Windows GUI wallet:**
+[https://github.com/brazukcoin/brazukcoinwallet/releases/](https://github.com/brazukcoin/brazukcoinwallet/releases/)
 
+*Instructions*
+- Unzip the file: `BrazukCoin.Gui.Wallet.zip`
+- Run the executable: `Brazukcoin.exe`
+- Write down your seed information in case you lose your wallet!
 
-###### You can also compile directly from the source code:
+**Linux GUI wallet:**
+[https://github.com/brazukcoin/brazukcoinwallet/releases/](https://github.com/brazukcoin/brazukcoinwallet/releases/)
 
+*Instructions*
+- Decompress the file: `tar -zxvf Brazukcoin.tar.gz`
+- Run the executable: `./Brazukcoin`
+- Write down your seed information in case you lose your wallet!
 
-**On Linux:**
 
-1 - Build your environment:
-```
-~$ sudo apt-get update ~$ sudo apt-get install build-essential git cmake libboost-all-dev
-```
 
-2 - Download Brazukcoin's source code:
-```
-~$ git clone https://github.com/brazukcoin/brazukcoin.git
-```
+######Pre-compiled binaries:
 
-3 - Build the binaries:
-```
-~$ cd brazukcoin ~/brazukcoin$ make
-```
+**For Mac:**
+[https://github.com/brazukcoin/brazukcoin/releases/](https://github.com/brazukcoin/brazukcoin/releases/)
 
-4 - Sync the blockchain:
-```
-~/brazukcoin$ cd build/release/src/ ~/brazukcoin/build/release/src$ ./brazukcoind --log-level=3
-```
+*Instructions*
+- Run `brazucoind` to sync the blockchain, then keep the program running
+- Run `simplewallet` to create/open your wallet
+- Write down your seed information in case you lose your wallet!
 
-5 - Create your wallet (run 'simplewallet' on a new terminal because you need the brazukcoin daemon running):
-```
-~/brazukcoin/build/release/src$ ./simplewallet
-```
-IMPORTANT: Don't forget you password! Write down you seed information, your private keys, and keep your *.wallet file safe, or you might lose your money!
 
-6 - Start mining your coins:
-```
-type 'start_mining' (no quotes).
+**For Windows:**
+[https://github.com/brazukcoin/brazukcoin/releases/](https://github.com/brazukcoin/brazukcoin/releases/)
 
-For more commands, type 'help'
-```
+Download the executables if you don't want to compile from source code Windows.
 
+*Instructions*
+- Run `brazukcoind.exe` to synchronize your computer with the P2P network blockchain, then keep the program running
+- Run `simplewallet.exe` to create/open your wallet
+- Write down your seed information in case you lose your wallet!
 
-**On Windows:**
+**For Linux:**
+[https://github.com/brazukcoin/brazukcoin/releases/](https://github.com/brazukcoin/brazukcoin/releases/)
 
+*Instructions (Tested on Ubuntu 16.0)*
+- Extract the files: `tar -zxvf brazukcoin_linux_x64_bin.tar.gz`
+- Run `./brazukcoind` to synchronize your computer with the P2P network blockchain, then keep the program running
+- Open a new terminal and run `./simplewallet` to create/open your wallet
+- Write down your seed information in case you lose your wallet!
 
-1 - Install Microsoft Visual Studio Community 2013
-```
-https://www.visualstudio.com/en-us/news/releasenotes/vs2013-community-vs
-Click on 'Download Older Version' and then on 'Visual Studio Community with Update 5'
 
-Note: You'll have to create a free account with Microsoft MSDN to proceed with the download.
-```
 
-2 - Install the latest CMake
-```
-https://cmake.org/download
+######You can also compile directly from the source code:
 
-During installation choose 'Add cmake to your system path',
-```
 
-3 - Download and compile Boost 5.7.0 C++ Libraries
-```
-https://sourceforge.net/projects/boost/files/boost/1.57.0/boost_1_57_0.zip/download
+**For Linux:**
 
-Extract the zip archive.
+*Linux Instructions:*
 
-Compile Boost 5.7.0
+- Build your environment
+~$ `sudo apt-get update`
+~$ `sudo apt-get install build-essential git cmake libboost-all-dev`
 
-Run Windows command prompt ('cmd')
+- Download Brazukcoin source code
+~$ `git clone ​https://github.com/brazukcoin/brazukcoin.git`
 
-'cd' to where you extracted boost__1_57_0
+- Build the binaries
+~$ `cd brazukcoin`
+~/brazukcoin$ `make`
 
-Run 'bootstrap.bat'
+- Sync the blockchain
+~/brazukcoin$ `cd build/release/src/`
+~/brazukcoin/build/release/src$ `./brazukcoind --log-level=3`
 
-Run 'b2 --toolset=msvc variant=release link=static threading=multi runtime-link=static address-model=64'
-```
+- Create your wallet (open it in a new terminal because you need the
+brazukcoin daemon running)
+~/brazukcoin/build/release/src$ `./simplewallet`
 
-4 - Install Git distributed version control system
-```
-https://git-scm.com/download/win
-```
+- Write down your seed information in case you lose your wallet!
 
-5 - Download brazukcoin source code to your computer
-```
-Run 'git shell' or 'git bash'
-```
-Clone repository
-type 'git clone https://github.com/brazukcoin/brazukcoin.git'
-```
+- Start mining your coins! Type `start_mining`. For more
+commands, type `help`.
 
-Now finally compile Brazukcoin!
-```
-cd brazukcoin
-mkdir build -- Create 'build' directory.
-cd build    -- Change to build Directory.
-cmake -G "Visual Studio 12 Win64" -DBOOST_ROOT=c:\boost_1_57_0 -DBOOST_LIBRARY_DIR=c:\boost_1_57_0\stage\lib ..
-msbuild Brazukcoin.sln /p:Configuration=release
-```
 
-Done! Find you binaries in ..\brazukcoin\build\src\release\
+**Windows Instructions:**
 
+- Install Microsoft Visual Studio Community 2013: [https://www.visualstudio.com/en-us/news/releasenotes/vs2013-community-vs](https://www.visualstudio.com/en-us/news/releasenotes/vs2013-community-vs)
+  - Click on `Download Older Version` then `Visual Studio Community with Update 5`
+  - You'll have to create a free account with [Microsoft MSDN](https://msdn.microsoft.com) to
+proceed with the download
 
+- Install the latest [CMake:](​https://cmake.org/download)
+  - During installation, choose `Add cmake to your system path`
 
-**Good luck!**
+- Download and compile Boost 5.7.0 C++ Libraries: [https://sourceforge.net/projects/boost/files/boost/1.57.0/boost_1_57_0.zip/download](https://sourceforge.net/projects/boost/files/boost/1.57.0/boost_1_57_0.zip/
+download)
+  - Extract the zip archive
+  - Compile Boost 5.7.0
+  - Run Windows command prompt `cmd`
+  - `cd` to where you extracted boost__1_57_0
+  - Run `bootstrap.bat`
+  - Run `b2 --toolset=msvc variant=release link=static threading=multi runtime-link=static address-model=64`
+
+- Install Git distributed version control system: [https://git-scm.com/download/win](https://git-scm.com/download/win)
+
+- Download brazukcoin source code to your computer
+  - Run `git shell` or `git bash`
+  - Clone repository type `git clone https://github.com/brazukcoin/brazukcoin.git`
+
+- Finally, compile Brazukcoin
+  - `cd brazukcoin`
+  - `mkdir build` -- Create 'build' directory.
+  - `cd build` -- Change to build Directory.
+  - `cmake -G "Visual Studio 12 Win64" -DBOOST_ROOT=c:\boost_1_57_0 -DBOOST_LIBRARY_DIR=c:\boost_1_57_0\stage\lib ..`
+  - `msbuild Brazukcoin.sln /p:Configuration=release`
+
+Find your binaries in ..\brazukcoin\build\src\release\
+
+
+
+
+Please consider donating to the dev to help with the continued maintenance and development of Brazukcoin!
+
+######BZK: `br1P7xs8K9nPeUyG3qdQD5CMxCMNvBKkUZPzqrrbPBfU56kb1HyXo9jJU4N2fWSDrkY4a1SyDiuSEDW vJUkauT4Q1HfwqBDyH`
+
+######BTC: `13UWgYzr1yvEcA3V5YSuDCAcpPp4F1QbPN`
+
 
