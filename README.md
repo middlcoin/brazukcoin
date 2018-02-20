@@ -1,4 +1,4 @@
-![Brazukcoin Logo](https://github.com/brazukcoin/brazukcoin/src/Images/brazukcoin-logo.png)
+![Brazukcoin Logo](https://github.com/brazukcoin/brazukcoin/blob/master/src/Images/brazukcoin-logo.png)
 
 
 # Brazukcoin
@@ -10,7 +10,7 @@
 
 
 
-######Specifications
+###### Specifications
 
 - *Logo:* [https://goo.gl/Yz5yru](https://goo.gl/Yz5yru)
 - *Ticker:* BZK
@@ -29,7 +29,7 @@ More information about Brazukcoin's specifications can be found on the [Crypto R
 
 
 
-######Community
+###### Community
 
 - **Discord:** [https://discord.gg/u5654Jj](https://discord.gg/u5654Jj)
 - **Twitter:** [https://twitter.com/brazukcoin](https://twitter.com/brazukcoin)
@@ -40,14 +40,14 @@ More information about Brazukcoin's specifications can be found on the [Crypto R
 
 
 
-######Website
+###### Website
 
 **[https://www.brazukcoin.space](https://www.brazukcoin.space)**
 
 
 
 
-######Mining Pools
+###### Mining Pools
 
 You can create your own pool by cloning from [Brazukcoin Pool Github:](https://github.com/brazukcoin/pool.brazukcoin.org)
 
@@ -64,14 +64,14 @@ Or use these quality pools for Brazukcoin:
 
 
 
-######Block Explorer
+###### Block Explorer
 
 **[http://explorer.brazukcoin.org/](http://explorer.brazukcoin.org/)**
 
 
 
 
-######Wallets
+###### Wallets
 
 
 **Easy Brazukcoin Wallet Generator:**
@@ -98,7 +98,7 @@ Or use these quality pools for Brazukcoin:
 
 
 
-######Pre-compiled binaries:
+###### Pre-compiled binaries:
 
 **For Mac:**
 [https://github.com/brazukcoin/brazukcoin/releases/](https://github.com/brazukcoin/brazukcoin/releases/)
@@ -130,7 +130,7 @@ Download the executables if you don't want to compile from source code Windows.
 
 
 
-######You can also compile directly from the source code:
+###### You can also compile directly from the source code:
 
 
 **For Linux:**
@@ -201,8 +201,8 @@ Find your binaries in ..\brazukcoin\build\src\release\
 
 Please consider donating to the dev to help with the continued maintenance and development of Brazukcoin!
 
-######BZK: `br1P7xs8K9nPeUyG3qdQD5CMxCMNvBKkUZPzqrrbPBfU56kb1HyXo9jJU4N2fWSDrkY4a1SyDiuSEDW vJUkauT4Q1HfwqBDyH`
+###### BZK: `br1P7xs8K9nPeUyG3qdQD5CMxCMNvBKkUZPzqrrbPBfU56kb1HyXo9jJU4N2fWSDrkY4a1SyDiuSEDW vJUkauT4Q1HfwqBDyH`
 
-######BTC: `13UWgYzr1yvEcA3V5YSuDCAcpPp4F1QbPN`
+###### BTC: `13UWgYzr1yvEcA3V5YSuDCAcpPp4F1QbPN`
 
 
