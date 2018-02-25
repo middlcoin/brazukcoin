@@ -405,20 +405,17 @@ namespace CryptoNote {
 		return Common::fromString(strAmount, amount);
 	}
 
-	difficulty_type Currency::nextDifficulty(uint8_t blockMajorVersion, std::vector<uint64_t> timestamps,
-		std::vector<difficulty_type> cumulativeDifficulties) const {
+	difficulty_type Currency::nextDifficulty(
+            uint8_t blockMajorVersion,
+            std::vector<uint64_t> timestamps,
+            std::vector<difficulty_type> cumulativeDifficulties
+            ) const {
+        
+        difficulty_type nextDiff(0);
 
-		// new difficulty calculation
-		// based on Zawy difficulty algorithm v1.0
-		// next Diff = Avg past N Diff * TargetInterval / Avg past N solve times
-		// as described at https://github.com/monero-project/research-lab/issues/3
-		// Window time span and total difficulty is taken instead of average as suggested by Eugene
-
-		if (blockMajorVersion >= BLOCK_MAJOR_VERSION_2) {
-
-			size_t m_difficultyWindow_2 = CryptoNote::parameters::DIFFICULTY_WINDOW_V2;
-			assert(m_difficultyWindow_2 >= 2);
-
+        if (blockMajorVersion >= BLOCK_MAJOR_VERSION_2) {
+			logger(Logging::DEBUGGING,BRIGHT_BLUE) << "Diff block zawi";
+            size_t m_difficultyWindow_2 = CryptoNote::parameters::DIFFICULTY_WINDOW_V2;
 			if (timestamps.size() > m_difficultyWindow_2) {
 				timestamps.resize(m_difficultyWindow_2);
 				cumulativeDifficulties.resize(m_difficultyWindow_2);
@@ -431,40 +428,48 @@ namespace CryptoNote {
 				return 1;
 			}
 
-			sort(timestamps.begin(), timestamps.end());
+            const double_t adjust = 0.9912338056;
+            const uint64_t c_difficultyTarget = m_difficultyTarget;
 
-			uint64_t timeSpan = timestamps.back() - timestamps.front();
-			if (timeSpan == 0) {
-				timeSpan = 1;
-			}
+            uint64_t weightedSolveTimes = 0;
+            uint64_t aimedTarget = 0;
+            int64_t totalSolvedTime = 0;
 
-			difficulty_type totalWork = cumulativeDifficulties.back() - cumulativeDifficulties.front();
+            for (size_t i = 1; i < length; i++) {
+                uint64_t solveTime;
+                solveTime = timestamps[i] - timestamps[i-1];
+                if (solveTime >  8 * c_difficultyTarget) {
+                    solveTime =  8 * c_difficultyTarget;
+                }
+                weightedSolveTimes +=  solveTime * i;
+                totalSolvedTime += solveTime;
+            }
+            aimedTarget = adjust * ((length + 1) / 2.0) * c_difficultyTarget ;
+            if (weightedSolveTimes < c_difficultyTarget * length / 2) {
+                weightedSolveTimes = c_difficultyTarget * length / 2;
+            }
+			
+            difficulty_type totalWork = cumulativeDifficulties.back() - cumulativeDifficulties.front();
 			assert(totalWork > 0);
-
-			// uint64_t nextDiffZ = totalWork * m_difficultyTarget / timeSpan; 
-
  			uint64_t low, high;
-			low = mul128(totalWork, m_difficultyTarget, &high);
-			// blockchain error "Difficulty overhead" if this function returns zero
+			low = mul128(totalWork, aimedTarget, &high);
 			if (high != 0) {
 				return 0;
 			}
 
-			uint64_t nextDiffZ = low / timeSpan;
-
-			// minimum limit
-			if (nextDiffZ <= 100000) {
-				nextDiffZ = 100000;
+			nextDiff = low / weightedSolveTimes;
+			if (nextDiff <= 0) {
+				nextDiff = 1;
 			}
 
-			return nextDiffZ;
+			return nextDiff;
 
-			// end of new difficulty calculation
+			// end of zawi difficulty algorithm
 
 		} else {
 
 			// old difficulty calculation
-
+			logger(Logging::DEBUGGING,BRIGHT_BLUE) << "Diff block 2nd";
 			assert(m_difficultyWindow >= 2);
 
 			if (timestamps.size() > m_difficultyWindow) {
