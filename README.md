@@ -138,61 +138,61 @@ Download the executables if you don't want to compile from source code Windows.
 *Linux Instructions:*
 
 - Build your environment
-~$ `sudo apt-get update`
-~$ `sudo apt-get install build-essential git cmake libboost-all-dev`
+` ~$ sudo apt-get update `
+` ~$ sudo apt-get install build-essential git cmake libboost-all-dev `
 
 - Download Brazukcoin source code
-~$ `git clone ​https://github.com/brazukcoin/brazukcoin.git`
+` ~$ git clone ​https://github.com/brazukcoin/brazukcoin.git `
 
 - Build the binaries
-~$ `cd brazukcoin`
-~/brazukcoin$ `make`
+` ~$ cd brazukcoin `
+` ~/brazukcoin$ make `
 
 - Sync the blockchain
-~/brazukcoin$ `cd build/release/src/`
-~/brazukcoin/build/release/src$ `./brazukcoind --log-level=3`
+` ~/brazukcoin$ cd build/release/src/ `
+` ~/brazukcoin/build/release/src$ ./brazukcoind --log-level=3 `
 
 - Create your wallet (open it in a new terminal because you need the
 brazukcoin daemon running)
-~/brazukcoin/build/release/src$ `./simplewallet`
+` ~/brazukcoin/build/release/src$ ./simplewallet `
 
 - Write down your seed information in case you lose your wallet!
 
-- Start mining your coins! Type `start_mining`. For more
-commands, type `help`.
+- Start mining your coins! Type ` start_mining `. For more
+commands, type ` help `.
 
 
 **Windows Instructions:**
 
 - Install Microsoft Visual Studio Community 2013: [https://www.visualstudio.com/en-us/news/releasenotes/vs2013-community-vs](https://www.visualstudio.com/en-us/news/releasenotes/vs2013-community-vs)
-  - Click on `Download Older Version` then `Visual Studio Community with Update 5`
+  - Click on ` Download Older Version ` then ` Visual Studio Community with Update 5 `
   - You'll have to create a free account with [Microsoft MSDN](https://msdn.microsoft.com) to
 proceed with the download
 
 - Install the latest [CMake:](​https://cmake.org/download)
-  - During installation, choose `Add cmake to your system path`
+  - During installation, choose ` Add cmake to your system path `
 
 - Download and compile Boost 5.7.0 C++ Libraries: [https://sourceforge.net/projects/boost/files/boost/1.57.0/boost_1_57_0.zip/download](https://sourceforge.net/projects/boost/files/boost/1.57.0/boost_1_57_0.zip/
 download)
   - Extract the zip archive
   - Compile Boost 5.7.0
-  - Run Windows command prompt `cmd`
-  - `cd` to where you extracted boost__1_57_0
-  - Run `bootstrap.bat`
-  - Run `b2 --toolset=msvc variant=release link=static threading=multi runtime-link=static address-model=64`
+  - Run Windows command prompt ` cmd `
+  - ` cd ` to where you extracted boost__1_57_0
+  - Run ` bootstrap.bat `
+  - Run ` b2 --toolset=msvc variant=release link=static threading=multi runtime-link=static address-model=64 `
 
 - Install Git distributed version control system: [https://git-scm.com/download/win](https://git-scm.com/download/win)
 
 - Download brazukcoin source code to your computer
-  - Run `git shell` or `git bash`
-  - Clone repository type `git clone https://github.com/brazukcoin/brazukcoin.git`
+  - Run ` git shell ` or ` git bash `
+  - Clone repository type ` git clone https://github.com/brazukcoin/brazukcoin.git `
 
-- Finally, compile Brazukcoin
-  - `cd brazukcoin`
-  - `mkdir build` -- Create 'build' directory.
-  - `cd build` -- Change to build Directory.
-  - `cmake -G "Visual Studio 12 Win64" -DBOOST_ROOT=c:\boost_1_57_0 -DBOOST_LIBRARY_DIR=c:\boost_1_57_0\stage\lib ..`
-  - `msbuild Brazukcoin.sln /p:Configuration=release`
+- Finally, compile Brazukcoin!
+  - ` cd brazukcoin `
+  - ` mkdir build ` -- Create 'build' directory.
+  - ` cd build ` -- Change to build Directory.
+  - ` cmake -G "Visual Studio 12 Win64" -DBOOST_ROOT=c:\boost_1_57_0 -DBOOST_LIBRARY_DIR=c:\boost_1_57_0\stage\lib .. `
+  - ` msbuild Brazukcoin.sln /p:Configuration=release `
 
 Find your binaries in ..\brazukcoin\build\src\release\
 
@@ -201,8 +201,8 @@ Find your binaries in ..\brazukcoin\build\src\release\
 
 Please consider donating to the dev to help with the continued maintenance and development of Brazukcoin!
 
-###### BZK: `br1P7xs8K9nPeUyG3qdQD5CMxCMNvBKkUZPzqrrbPBfU56kb1HyXo9jJU4N2fWSDrkY4a1SyDiuSEDW vJUkauT4Q1HfwqBDyH`
+###### BZK: ` br1P7xs8K9nPeUyG3qdQD5CMxCMNvBKkUZPzqrrbPBfU56kb1HyXo9jJU4N2fWSDrkY4a1SyDiuSEDW vJUkauT4Q1HfwqBDyH `
 
-###### BTC: `13UWgYzr1yvEcA3V5YSuDCAcpPp4F1QbPN`
+###### BTC: ` 13UWgYzr1yvEcA3V5YSuDCAcpPp4F1QbPN `
 
 
