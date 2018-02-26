@@ -42,7 +42,7 @@ More information about Brazukcoin's specifications can be found on the [Crypto R
 
 ###### Website
 
-**[https://www.brazukcoin.space](https://www.brazukcoin.space)**
+**[https://www.brazukcoin.org](https://www.brazukcoin.org)**
 
 
 
