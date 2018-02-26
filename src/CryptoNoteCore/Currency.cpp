@@ -414,7 +414,6 @@ namespace CryptoNote {
         difficulty_type nextDiff(0);
 
         if (blockMajorVersion >= BLOCK_MAJOR_VERSION_2) {
-			logger(Logging::DEBUGGING,BRIGHT_BLUE) << "Diff block zawi";
             size_t m_difficultyWindow_2 = CryptoNote::parameters::DIFFICULTY_WINDOW_V2;
 			if (timestamps.size() > m_difficultyWindow_2) {
 				timestamps.resize(m_difficultyWindow_2);
@@ -469,7 +468,6 @@ namespace CryptoNote {
 		} else {
 
 			// old difficulty calculation
-			logger(Logging::DEBUGGING,BRIGHT_BLUE) << "Diff block 2nd";
 			assert(m_difficultyWindow >= 2);
 
 			if (timestamps.size() > m_difficultyWindow) {
