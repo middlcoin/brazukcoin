@@ -1,12 +1,12 @@
-![Brazukcoin Logo](https://github.com/brazukcoin/brazukcoin/blob/master/src/Images/brazukcoin-logo.png)
+# If you want to build the GUI wallet instead, go [here:](https://github.com/brazukcoin/brazukcoinwallet)
 
+![Brazukcoin Logo](https://github.com/brazukcoin/brazukcoin/blob/master/src/Images/brazukcoin-logo.png)
 
 # Brazukcoin
 
 ## Anonymous • Secure • Accessible
 
 ##### In a world of mounting threats to personal liberty, Brazukcoin adds a new front of resistance through real financial freedom. Brazukcoin is based on time-tested blockchain technology while also adding extreme privacy features in its CryptoNote algorithm. The code is (and will always be) free and open-source.
-
 
 
 
