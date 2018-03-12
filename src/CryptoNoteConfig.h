@@ -19,9 +19,6 @@
 
 #pragma once
 
-#ifndef SRC_CRYPTONOTECONFIG_H_
-#define SRC_CRYPTONOTECONFIG_H_
-
 #include <cstdint>
 
 
@@ -127,7 +124,8 @@ const char     P2P_STAT_TRUSTED_PUB_KEY[]                    = "8f80f9a5a434a9f1
 
 const char* const SEED_NODES[] = {
     "132.148.90.225:44044",
-    "64.110.130.30:44044"
+    "64.110.130.30:44044",
+    "80.208.231.220:44044"
 };
 
 struct CheckpointData {
@@ -153,5 +151,4 @@ const std::initializer_list<CheckpointData> CHECKPOINTS = {
 
 #define ALLOW_DEBUG_COMMANDS
 
-#endif  // SRC_CRYPTONOTECONFIG_H_
 
