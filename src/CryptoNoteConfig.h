@@ -126,7 +126,8 @@ const char* const SEED_NODES[] = {
     "132.148.90.225:44044",
     "64.110.130.30:44044",
     "80.208.231.220:44044",
-    "208.110.82.206:44044"
+    "208.110.82.206:44044",
+    "69.30.231.147:12001"
 };
 
 struct CheckpointData {
@@ -145,8 +146,7 @@ const std::initializer_list<CheckpointData> CHECKPOINTS = {
     { 15872, "5802fb368b199b323a79d2f72b1b639a3f4a62d896b61665a9aafc0194b52687" },
     { 17856, "ccd3e3fa12bb56694a04fc5aed2a8546ec95a4073ef019f639be9a567ab6b73e" },
     { 19840, "9f1dd8c2bb42525c66ee991405b35263e31793ce7b689f0840430e5f3c20d7f3" },
-    { 21824, "a6652f8d75c8b1b2a6aa620ce35e2a08802b328af1e978d995df538a6bb2ee63" }    
-
+    { 21824, "a6652f8d75c8b1b2a6aa620ce35e2a08802b328af1e978d995df538a6bb2ee63" }
 };
 
 }  // namespace CryptoNote
