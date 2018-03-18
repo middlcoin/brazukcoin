@@ -1,6 +1,6 @@
 // Copyright (c) 2012-2016, The CryptoNote developers, The Bytecoin developers, The Karbowanec developers
 // Copyright (c) 2018, The Brazukcoin developers
-// Copyright (c) 2018, The middl.ru developers
+// Copyright (c) 2018, The middlcoin, middl.ru developers
 //
 // This file is part of Bytecoin.
 //
@@ -92,7 +92,7 @@ const char     MINER_CONFIG_FILE_NAME[]                      = "miner_conf.json"
 }  // namespace parameters
 
 const char     CRYPTONOTE_NAME[]                             = "middlcoin";
-const char     GENESIS_COINBASE_TX_HEX[]                     = "";
+const char     GENESIS_COINBASE_TX_HEX[]                     = "013c01ff0001d28bb7a303029b2e4c0281c0b02e7c53291a94d1d0cbff8883f8024f5142ee494ffbbd08807121012995998e1ea7209963605bee21a67a1a23d892eea74c37df34fe7c73ecbcf435";
 
 const uint8_t  CURRENT_TRANSACTION_VERSION                   =  1;
 const uint8_t  BLOCK_MAJOR_VERSION_1                         =  1;
@@ -124,12 +124,11 @@ const size_t   P2P_DEFAULT_HANDSHAKE_INVOKE_TIMEOUT          = 5000;  // 5 secon
 const char     P2P_STAT_TRUSTED_PUB_KEY[]                    = "";
 
 const char* const SEED_NODES[] = {
-  "213.179.214.63:48734",
-  "213.179.214.53:48734",
-  "213.179.214.80:48734",
-  "18.222.87.28:48734",
-  "18.220.37.85:48734",
-  "18.188.32.168:48734"
+  "18.222.90.148:48734",
+  "18.188.19.243:48734",
+  "18.218.111.235:48734",
+  "80.211.226.11:48734",
+  "88.198.34.166:48734"
 };
 
 struct CheckpointData {
