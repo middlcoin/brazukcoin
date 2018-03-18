@@ -1,5 +1,5 @@
 
-
+![Middlcoin_logo](https://github.com/middlcoin/middlcoin/blob/master/src/Images/Middlcoin_log_150x150.png)
 
 # MiddlCoin (MIDDL)
 
